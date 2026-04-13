@@ -14,7 +14,7 @@ class AuthController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required',
-            'email' => 'required|unique',
+            'email' => 'required|unique:users',
             'password' => 'required|min:3'
         ]);
 
@@ -57,6 +57,17 @@ class AuthController extends Controller
             'status' => 'success',
             'message' => 'Login successful',
             'data' => $user
+        ]);
+    }
+
+    public function logout()
+    {
+        $user = Auth::user();
+        $user->tokens()->delete();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Logout successful'
         ]);
     }
 }
